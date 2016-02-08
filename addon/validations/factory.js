@@ -165,7 +165,7 @@ function createValidationsObject(validations = {}) {
       }
 
       validatableAttributes.forEach((attribute) => {
-        attrs[attribute] = createCPValidationFor(attribute, validations[attribute]);
+        attrs[attribute] = createCPValidationFor(attribute, validationRules[attribute]);
       });
 
       this.setProperties({
