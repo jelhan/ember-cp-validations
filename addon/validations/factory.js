@@ -289,7 +289,7 @@ function createValidationsClass(inheritedValidationsClass, validations, owner) {
  * @return {Ember.Object}
  */
 function createAttrsClass(validatableAttributes, validationRules, owner) {
-  return Ember.Object.extend({
+  return Ember.Object.extend(owner.ownerInjection(), {
     init() {
       this._super(...arguments);
       const model = this.get('_model');
@@ -310,6 +310,11 @@ function createAttrsClass(validatableAttributes, validationRules, owner) {
         }
       });
     },
+
+    i18n: Ember.inject.service(),
+    consumeLocale: Ember.on('init', function() {
+      this.get('i18n.locale');
+    }),
 
     destroy() {
       this._super(...arguments);
@@ -447,6 +452,7 @@ function getCPDependentKeysFor(attribute, validations, owner) {
 
   dependentKeys = flatten(dependentKeys);
   dependentKeys.push(`_model.${attribute}`);
+  dependentKeys.push('i18n.locale');
 
   return emberArray(dependentKeys).uniq();
 }
